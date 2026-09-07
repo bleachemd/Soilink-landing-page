@@ -170,22 +170,26 @@ if (progressBar) {
   updateProgress();
 }
 
-// Count-up stats — run once when the band scrolls into view
+// Count-up stats.
+// The final value lives in the HTML, so the real numbers are on screen even
+// if this never runs (no JS, full-page capture, print). The animation only
+// rewinds to zero and plays back up to that value.
 const statNums = document.querySelectorAll('[data-count-to]');
 if (statNums.length) {
-  const runCount = (el) => {
-    const target = parseFloat(el.dataset.countTo);
+  const fmtStat = (el, n) => {
     const decimals = parseInt(el.dataset.decimals || '0', 10);
     const prefix = el.dataset.prefix || '';
     const suffix = el.dataset.suffix || '';
-
     // Russian decimal separator is a comma ("$2,4 млрд")
-    const fmt = (n) => prefix + n.toFixed(decimals).replace('.', ',') + suffix;
+    return prefix + n.toFixed(decimals).replace('.', ',') + suffix;
+  };
 
-    if (prefersReducedMotion) {
-      el.textContent = fmt(target);
-      return;
-    }
+  const runCount = (el) => {
+    if (el.dataset.counted) return;
+    el.dataset.counted = '1';
+
+    const target = parseFloat(el.dataset.countTo);
+    if (!isFinite(target) || prefersReducedMotion) return; // leave the HTML value as-is
 
     const duration = 1600;
     const start = performance.now();
@@ -193,9 +197,10 @@ if (statNums.length) {
       const t = Math.min(1, (now - start) / duration);
       // easeOutExpo — fast start, gentle landing
       const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-      el.textContent = fmt(target * eased);
+      el.textContent = fmtStat(el, target * eased);
       if (t < 1) requestAnimationFrame(step);
     };
+    el.textContent = fmtStat(el, 0);
     requestAnimationFrame(step);
   };
 
@@ -206,7 +211,7 @@ if (statNums.length) {
         statObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.5 });
+  }, { threshold: 0.4 });
 
   statNums.forEach((el) => statObserver.observe(el));
 }
