@@ -2,8 +2,40 @@
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Scroll reveal
+// Scroll reveal — atomicmail applies one slide-up motif to nearly every
+// block on the page, so rather than hand-tagging each element we mark the
+// content blocks here and let one observer drive them all.
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const AUTO_REVEAL = [
+  '.section > .container > .eyebrow',
+  '.section > .container > h2',
+  '.section > .container > .section-sub',
+  '.table-wrap',
+  '.arch-step',
+  '.scenario-card',
+  '.invest-copy > .eyebrow',
+  '.invest-copy > h2',
+  '.invest-text',
+  '.invest-list li',
+  '.invest-form-wrap',
+  '.trust-label',
+  '.site-footer .footer-inner',
+].join(',');
+
+document.querySelectorAll(AUTO_REVEAL).forEach((el) => el.classList.add('reveal'));
+
+// Stagger siblings: each group restarts the index so rows/cards cascade.
+document.querySelectorAll('.scenario-cards, .arch-flow, .invest-list, .section > .container, .invest-copy').forEach((group) => {
+  let i = 0;
+  Array.from(group.children).forEach((child) => {
+    if (child.classList.contains('reveal')) {
+      child.style.setProperty('--i', i);
+      i += 1;
+    }
+  });
+});
+
 const revealEls = document.querySelectorAll('.reveal');
 
 if (prefersReducedMotion) {
@@ -18,7 +50,7 @@ if (prefersReducedMotion) {
         }
       });
     },
-    { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
+    { threshold: 0.12, rootMargin: '0px 0px -60px 0px' }
   );
   revealEls.forEach((el) => revealObserver.observe(el));
 }
