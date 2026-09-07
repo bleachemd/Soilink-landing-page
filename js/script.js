@@ -13,6 +13,7 @@ const AUTO_REVEAL = [
   '.section > .container > .section-sub',
   '.table-wrap',
   '.arch-step',
+  '.shot',
   '.scenario-card',
   '.invest-copy > .eyebrow',
   '.invest-copy > h2',
@@ -285,3 +286,14 @@ if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
     });
   });
 }
+
+// Screenshot placeholders — until the real product screens are dropped into
+// assets/, show a labelled placeholder instead of a broken-image icon.
+document.querySelectorAll('.shot-frame img').forEach((img) => {
+  const markMissing = () => {
+    img.closest('.shot-frame').classList.add('is-missing');
+    img.removeAttribute('alt');
+  };
+  img.addEventListener('error', markMissing);
+  if (img.complete && img.naturalWidth === 0) markMissing();
+});
