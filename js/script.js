@@ -146,3 +146,137 @@ pitchForm.addEventListener('submit', async (event) => {
     submitBtn.disabled = false;
   }
 });
+
+/* =========================================================
+   Creative layer
+   ========================================================= */
+
+// Scroll progress bar
+const progressBar = document.getElementById('scrollProgress');
+if (progressBar) {
+  let progressTicking = false;
+  const updateProgress = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = max > 0 ? window.scrollY / max : 0;
+    progressBar.style.transform = `scaleX(${Math.min(1, Math.max(0, ratio))})`;
+    progressTicking = false;
+  };
+  window.addEventListener('scroll', () => {
+    if (!progressTicking) {
+      progressTicking = true;
+      requestAnimationFrame(updateProgress);
+    }
+  }, { passive: true });
+  updateProgress();
+}
+
+// Count-up stats — run once when the band scrolls into view
+const statNums = document.querySelectorAll('[data-count-to]');
+if (statNums.length) {
+  const runCount = (el) => {
+    const target = parseFloat(el.dataset.countTo);
+    const decimals = parseInt(el.dataset.decimals || '0', 10);
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+
+    // Russian decimal separator is a comma ("$2,4 млрд")
+    const fmt = (n) => prefix + n.toFixed(decimals).replace('.', ',') + suffix;
+
+    if (prefersReducedMotion) {
+      el.textContent = fmt(target);
+      return;
+    }
+
+    const duration = 1600;
+    const start = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      // easeOutExpo — fast start, gentle landing
+      const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+      el.textContent = fmt(target * eased);
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        runCount(entry.target);
+        statObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  statNums.forEach((el) => statObserver.observe(el));
+}
+
+// Live telemetry — values drift within a plausible band so the hero panel
+// reads as a real sensor feed rather than a static mockup.
+const teleNums = document.querySelectorAll('[data-tele]');
+if (teleNums.length && !prefersReducedMotion) {
+  const drift = () => {
+    teleNums.forEach((el) => {
+      const min = parseFloat(el.dataset.min);
+      const max = parseFloat(el.dataset.max);
+      const decimals = parseInt(el.dataset.decimals || '1', 10);
+      const current = parseFloat(String(el.textContent).replace(',', '.')) || (min + max) / 2;
+      // small random walk, clamped to the band
+      const next = Math.min(max, Math.max(min, current + (Math.random() - 0.5) * (max - min) * 0.18));
+      el.textContent = next.toFixed(decimals).replace('.', ',');
+
+      const bar = el.closest('.tele-cell').querySelector('.tele-bar i');
+      if (bar) bar.style.width = `${((next - min) / (max - min)) * 100}%`;
+    });
+  };
+  drift();
+  setInterval(drift, 2400);
+}
+
+// Sparkline for the 24h telemetry chart
+const teleChart = document.querySelector('.tele-chart');
+if (teleChart) {
+  const w = 240;
+  const h = 56;
+  const points = 26;
+  const vals = [];
+  let v = 0.5;
+  for (let i = 0; i < points; i++) {
+    v = Math.min(0.92, Math.max(0.12, v + (Math.random() - 0.48) * 0.22));
+    vals.push(v);
+  }
+  const coords = vals.map((val, i) => [(i / (points - 1)) * w, h - val * h]);
+  // smooth the path with midpoint curves
+  let d = `M ${coords[0][0].toFixed(1)} ${coords[0][1].toFixed(1)}`;
+  for (let i = 1; i < coords.length; i++) {
+    const [px, py] = coords[i - 1];
+    const [cx, cy] = coords[i];
+    const mx = (px + cx) / 2;
+    d += ` Q ${px.toFixed(1)} ${py.toFixed(1)} ${mx.toFixed(1)} ${((py + cy) / 2).toFixed(1)}`;
+  }
+  d += ` T ${coords[coords.length - 1][0].toFixed(1)} ${coords[coords.length - 1][1].toFixed(1)}`;
+
+  teleChart.querySelector('.tele-line').setAttribute('d', d);
+  teleChart.querySelector('.tele-area').setAttribute('d', `${d} L ${w} ${h} L 0 ${h} Z`);
+}
+
+// Cursor glow + subtle 3D tilt on cards
+const tiltCards = document.querySelectorAll('.arch-step, .scenario-card');
+if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
+  tiltCards.forEach((card) => {
+    card.classList.add('tilt');
+    card.addEventListener('mousemove', (event) => {
+      const r = card.getBoundingClientRect();
+      const px = (event.clientX - r.left) / r.width;
+      const py = (event.clientY - r.top) / r.height;
+      card.style.setProperty('--mx', `${px * 100}%`);
+      card.style.setProperty('--my', `${py * 100}%`);
+      const rx = (0.5 - py) * 6;
+      const ry = (px - 0.5) * 6;
+      card.style.transform = `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-6px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+}
