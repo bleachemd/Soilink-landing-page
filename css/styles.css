@@ -715,6 +715,11 @@ tbody tr:hover td.col-highlight { background: var(--blue-100); }
   .nav-toggle { display: flex; }
 }
 
+/* Comparison table is desktop-only */
+@media (max-width: 900px) {
+  #compare { display: none; }
+}
+
 /* ---------- Scroll reveal (atomicmail-style slide-up) ----------
    Their whole page animates on one motif: every block fades in while
    sliding up, with a soft ease-out and a short stagger between siblings. */
