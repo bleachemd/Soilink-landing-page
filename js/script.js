@@ -25,7 +25,6 @@ const releaseIntro = () => root.classList.remove('js-intro');
 const VANTA_SRC = {
   three: 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js',
   dots: 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js',
-  net: 'https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.net.min.js',
 };
 
 document.getElementById('year').textContent = new Date().getFullYear();
@@ -751,7 +750,7 @@ async function initVanta() {
   if (!supportsWebGL()) return;
   try {
     await loadScript(VANTA_SRC.three);
-    await Promise.all([loadScript(VANTA_SRC.dots), loadScript(VANTA_SRC.net)]);
+    await loadScript(VANTA_SRC.dots);
   } catch (err) {
     return; // the static CSS backgrounds stay in place
   }
@@ -764,20 +763,5 @@ async function initVanta() {
     size: 2.6,
     spacing: 32,
     showLines: false,
-  });
-
-  // Investors: the sensor network over night blue — mounted when it's close
-  ScrollTrigger.create({
-    trigger: '#invest',
-    start: 'top 180%',
-    once: true,
-    onEnter: () => mountVanta(document.getElementById('investBg'), VANTA.NET, {
-      color: 0x3d8fff,
-      backgroundColor: 0x082e70,
-      points: 9,
-      maxDistance: 21,
-      spacing: 19,
-      showDots: true,
-    }),
   });
 }

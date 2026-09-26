@@ -1023,65 +1023,6 @@ p { margin: 0 0 1em; }
   .arch-copy { padding-top: 12px; }
 }
 
-/* ---------- Comparison table ---------- */
-.table-wrap {
-  overflow-x: auto;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--card);
-  box-shadow: var(--shadow-card);
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 640px;
-}
-
-thead th {
-  text-align: left;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--ink-soft);
-  background: var(--paper-alt);
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--line);
-}
-
-.th-sub {
-  display: block;
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--ink-soft);
-  opacity: 0.75;
-}
-
-tbody td {
-  padding: 18px 20px;
-  border-bottom: 1px solid var(--line);
-  font-size: 14.5px;
-  vertical-align: top;
-  transition: background 0.2s ease;
-}
-tbody td:first-child { font-weight: 600; color: var(--ink); }
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: var(--paper-alt); }
-tbody tr:hover td.col-highlight { background: #d6e8ff; }
-
-.compare-table .col-highlight {
-  background: var(--blue-100);
-  font-weight: 600;
-  color: var(--blue-900);
-}
-.compare-table thead th.col-highlight {
-  background: var(--blue-600);
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
 /* ---------- Invest / contact ---------- */
 .invest-section {
   position: relative;
