@@ -1216,3 +1216,13 @@ p { margin: 0 0 1em; }
   font-weight: 500;
 }
 .legal-back { margin-top: 48px; }
+
+/* Mapbox attribution for the satellite map in the dashboard screenshot */
+.map-credit {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.map-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.map-credit a + a { margin-left: 6px; }
