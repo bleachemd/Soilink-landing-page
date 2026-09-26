@@ -8,13 +8,21 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='7' fill='%230A6CFF'/%3E%3Cpath d='M12 4.2c-4.2 3-7 7-7 11a7 7 0 0 0 14 0c0-4-2.8-8-7-11Z' stroke='white' stroke-width='1.8' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M8.5 17.5 15 9' stroke='white' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.css">
 <link rel="stylesheet" href="css/styles.css">
+<script>
+  // Hide the hero until GSAP has set its intro start state (no flash of the
+  // final layout). Failsafe: if the libraries never load, show it anyway.
+  document.documentElement.classList.add('js-intro');
+  setTimeout(function () { document.documentElement.classList.remove('js-intro'); }, 2500);
+</script>
 </head>
 <body>
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-<header class="site-header">
+<header class="site-header" id="siteHeader">
   <div class="container header-inner">
     <a class="logo" href="#top" aria-label="SoiLink — на главную">
       <span class="logo-mark" aria-hidden="true">
@@ -24,8 +32,8 @@
     </a>
     <nav class="nav" aria-label="Основная навигация">
       <a href="#product">О продукте</a>
-      <a href="#compare">Сравнение</a>
       <a href="#architecture">Архитектура</a>
+      <a href="#compare">Сравнение</a>
       <a href="#invest">Инвесторам</a>
     </nav>
     <div class="header-cta">
@@ -47,39 +55,20 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="aurora" aria-hidden="true">
-      <span class="aurora-blob aurora-1"></span>
-      <span class="aurora-blob aurora-2"></span>
-      <span class="aurora-blob aurora-3"></span>
-    </div>
-    <div class="hero-icons" aria-hidden="true">
-      <span class="hicon hicon-1" data-float="1">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
-      </span>
-      <span class="hicon hicon-2" data-float="2">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg>
-      </span>
-      <span class="hicon hicon-3" data-float="3">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3"/><path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4"/><path d="M5 21h14"/></svg>
-      </span>
-      <span class="hicon hicon-4" data-float="1">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
-      </span>
-      <span class="hicon hicon-5" data-float="2">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/></svg>
-      </span>
-      <span class="hicon hicon-6" data-float="3">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
-      </span>
-    </div>
+    <!-- Vanta DOTS mounts here: a field of sensors in perspective -->
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <div class="hero-veil" aria-hidden="true"></div>
 
     <div class="container hero-inner">
-      <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span>SoiLink · AgTech pre-seed</p>
-      <h1><span class="grad-text">Умный мониторинг</span> почвы<br>для аграриев</h1>
+      <a class="hero-pill" href="#invest"><span class="live-dot" aria-hidden="true"></span>Открыт pre-seed раунд</a>
+      <h1 class="hero-title">
+        <span class="hero-line" data-split>Умный мониторинг почвы</span>
+        <span class="hero-line"><span data-split>для</span> <span class="rotator" data-words="аграриев,агрономов,фермеров" aria-hidden="true"><span class="rotator-word">аграриев</span></span><span class="sr-only">аграриев</span></span>
+      </h1>
       <p class="hero-sub">Комплекс IoT-датчиков и AI-аналитика, предотвращающие истощение земель. Экономим воду и удобрения, управляя полем на основе точных данных.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary btn-lg" href="#contact">Запросить пилотный запуск</a>
-        <a class="btn btn-outline btn-lg" href="#invest">Стать инвестором</a>
+        <a class="btn btn-primary btn-lg" href="#contact" data-magnet>Запросить пилотный запуск</a>
+        <a class="btn btn-outline btn-lg" href="#invest" data-magnet>Стать инвестором</a>
       </div>
     </div>
 
@@ -88,7 +77,7 @@
       <div class="scenario-frame">
         <div class="frame-bar" aria-hidden="true">
           <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-          <span class="tab tab-active">Поле №3 · Датчик A-12</span>
+          <span class="tab tab-active"><span class="live-dot live-dot-sm"></span>Поле №3, датчик A-12</span>
           <span class="tab">Карта влажности</span>
           <span class="tab">Отчёт за неделю</span>
         </div>
@@ -97,49 +86,49 @@
           <div class="tele-cell">
             <span class="tele-label">Влажность</span>
             <span class="tele-value"><span class="tele-num" data-tele="moisture" data-min="21" data-max="27" data-decimals="1">24,3</span><span class="tele-unit">%</span></span>
-            <span class="tele-bar"><i style="width:24%"></i></span>
+            <span class="tele-bar"><i style="width:55%"></i></span>
           </div>
           <div class="tele-cell">
             <span class="tele-label">pH почвы</span>
             <span class="tele-value"><span class="tele-num" data-tele="ph" data-min="6.2" data-max="6.8" data-decimals="2">6,44</span></span>
-            <span class="tele-bar"><i style="width:64%"></i></span>
+            <span class="tele-bar"><i style="width:40%"></i></span>
           </div>
           <div class="tele-cell">
             <span class="tele-label">Температура</span>
             <span class="tele-value"><span class="tele-num" data-tele="temp" data-min="16" data-max="21" data-decimals="1">18,6</span><span class="tele-unit">°C</span></span>
-            <span class="tele-bar"><i style="width:46%"></i></span>
+            <span class="tele-bar"><i style="width:52%"></i></span>
           </div>
           <div class="tele-cell tele-chart-cell">
-            <span class="tele-label">Динамика за 24 ч</span>
+            <span class="tele-label">Влажность за 24 ч</span>
             <svg class="tele-chart" viewBox="0 0 240 56" preserveAspectRatio="none" aria-hidden="true">
               <defs>
                 <linearGradient id="teleFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="var(--blue-600)" stop-opacity="0.35"/>
-                  <stop offset="100%" stop-color="var(--blue-600)" stop-opacity="0"/>
+                  <stop offset="0%" stop-color="#0a6cff" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#0a6cff" stop-opacity="0"/>
                 </linearGradient>
               </defs>
               <path class="tele-area" fill="url(#teleFill)" d=""/>
-              <path class="tele-line" fill="none" stroke="var(--blue-600)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d=""/>
+              <path class="tele-line" fill="none" stroke="#0a6cff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d=""/>
             </svg>
           </div>
         </div>
 
         <div class="scenario-cards">
-          <article class="scenario-card card-gradient reveal">
+          <article class="scenario-card card-primary">
             <p class="cmd">/irrigation</p>
-            <p class="cmd-text">«Влажность в корневой зоне ниже 25%. Запустите полив сектора 3 на 40&nbsp;минут до полудня».</p>
+            <p class="cmd-text" data-decrypt>«Влажность в корневой зоне ниже 25%. Запустите полив сектора 3 на 40&nbsp;минут до полудня».</p>
             <p class="cmd-result"><strong>Результат:</strong> ноль перерасхода воды, растения защищены от засухи.</p>
           </article>
 
-          <article class="scenario-card reveal">
+          <article class="scenario-card">
             <p class="cmd">/fertilizer</p>
-            <p class="cmd-text">«Дефицит азота на глубине 30&nbsp;см. Рекомендовано: аммиачная селитра (30-0-0)».</p>
+            <p class="cmd-text" data-decrypt>«Дефицит азота на глубине 30&nbsp;см. Рекомендовано: аммиачная селитра (30-0-0)».</p>
             <p class="cmd-result"><strong>Результат:</strong> точечное внесение удобрений вместо обработки всего поля вслепую.</p>
           </article>
 
-          <article class="scenario-card reveal">
+          <article class="scenario-card">
             <p class="cmd">/alerts</p>
-            <p class="cmd-text">«Риск засоления и вымывания минералов».</p>
+            <p class="cmd-text" data-decrypt>«Риск засоления и вымывания минералов».</p>
             <p class="cmd-result"><strong>Результат:</strong> предупреждение деградации почвы за недели до появления внешних признаков.</p>
           </article>
         </div>
@@ -150,18 +139,19 @@
   <!-- PRODUCT SCREENS -->
   <section id="product" class="section showcase">
     <div class="container">
-      <p class="eyebrow">Интерфейс</p>
-      <h2 class="showcase-title">Поле целиком — на одном экране</h2>
-      <p class="section-sub">Тепловая карта влажности, диагностическая лента и план работ. Веб-панель для агронома и мобильное приложение для бригады.</p>
+      <h2 class="showcase-title" data-reveal-lines>Поле целиком — на одном экране</h2>
+      <p class="section-sub" data-reveal>Тепловая карта влажности, диагностическая лента и план работ. Веб-панель для агронома и мобильное приложение для бригады.</p>
 
       <div class="showcase-grid">
         <figure class="shot shot-desktop">
-          <div class="shot-frame shot-frame-browser">
-            <div class="shot-bar" aria-hidden="true">
-              <span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span>
-              <span class="shot-url">app.soilink.kz / мониторинг</span>
+          <div class="shot-stage">
+            <div class="shot-frame shot-frame-browser">
+              <div class="shot-bar" aria-hidden="true">
+                <span class="shot-dot"></span><span class="shot-dot"></span><span class="shot-dot"></span>
+                <span class="shot-url">app.soilink.kz / мониторинг</span>
+              </div>
+              <img src="assets/screen-dashboard.png" alt="Веб-панель SoiLink: тепловая карта влажности поля, показатели почвы и диагностическая лента" loading="lazy" width="1600" height="886">
             </div>
-            <img src="assets/screen-dashboard.png" alt="Веб-панель SoiLink: тепловая карта влажности поля, показатели почвы и диагностическая лента" loading="lazy" width="1600" height="886">
           </div>
           <figcaption>
             <strong>Веб-панель агронома</strong>
@@ -236,68 +226,84 @@
     </div>
   </section>
 
+  <!-- STATEMENT + STATS -->
+  <section class="facts">
+    <div class="container">
+      <p class="statement" data-scroll-reveal>
+        <span class="statement-muted">Лаборатория присылает анализ почвы через 7–20&nbsp;дней.</span>
+        Датчик SoiLink обновляет данные каждые несколько минут.
+      </p>
 
-  <!-- STATS -->
-  <section class="stats-band">
-    <div class="container stats-grid">
-      <div class="stat">
-        <span class="stat-num"><span class="stat-val" data-count-to="90">90</span><span class="stat-unit">млн га</span></span>
-        <span class="stat-label">почв Казахстана подвержены деградации</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num"><span class="stat-val" data-count-to="2.4" data-decimals="1" data-prefix="$">$2,4</span><span class="stat-unit">млрд</span></span>
-        <span class="stat-label">теряет отрасль ежегодно из-за управления вслепую</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num"><span class="stat-val" data-count-to="24" data-suffix="/7">24/7</span></span>
-        <span class="stat-label">телеметрия с корневой зоны без ручных замеров</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num"><span class="stat-val" data-count-to="25">25</span><span class="stat-unit">га</span></span>
-        <span class="stat-label">покрывает один датчик SoiLink</span>
+      <div class="stats-grid">
+        <div class="stat">
+          <span class="stat-num"><span class="stat-val" data-count-to="90">90</span><span class="stat-unit">млн га</span></span>
+          <span class="stat-label">почв Казахстана подвержены деградации</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num"><span class="stat-val" data-count-to="2.4" data-decimals="1" data-prefix="$">$2,4</span><span class="stat-unit">млрд</span></span>
+          <span class="stat-label">теряет отрасль ежегодно из-за управления вслепую</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num"><span class="stat-val" data-count-to="24" data-suffix="/7">24/7</span></span>
+          <span class="stat-label">телеметрия с корневой зоны без ручных замеров</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num"><span class="stat-val" data-count-to="25">25</span><span class="stat-unit">га</span></span>
+          <span class="stat-label">покрывает один датчик SoiLink</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ARCHITECTURE -->
-  <section id="architecture" class="section section-alt">
+  <!-- ARCHITECTURE: pinned data journey -->
+  <section id="architecture" class="section section-alt arch">
     <div class="container">
-      <p class="eyebrow">Архитектура</p>
-      <h2 class="reveal">Как данные идут от поля до экрана</h2>
-      <p class="section-sub reveal">Три уровня системы работают вместе — от датчика в грунте до рекомендации на экране фермера.</p>
+      <h2 data-reveal-lines>Как данные идут от поля до экрана</h2>
+      <p class="section-sub" data-reveal>Три уровня системы работают вместе — от датчика в грунте до рекомендации на экране фермера.</p>
 
-      <div class="arch-flow">
-        <div class="arch-step reveal">
-          <span class="arch-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.247 7.761a6 6 0 0 1 0 8.478"/><path d="M19.075 4.933a10 10 0 0 1 0 14.134"/><path d="M4.925 19.067a10 10 0 0 1 0-14.134"/><path d="M7.753 16.239a6 6 0 0 1 0-8.478"/><circle cx="12" cy="12" r="2"/></svg>
-          </span>
-          <h3>IoT-датчики</h3>
-          <p>Погружаются в корневую зону, снимают pH, влажность, температуру и состав газов каждые несколько минут.</p>
+      <div class="arch-flow" id="archFlow">
+        <div class="arch-track" aria-hidden="true">
+          <span class="arch-track-fill"></span>
+          <span class="arch-rail"><span class="arch-packet"></span></span>
         </div>
-        <div class="arch-arrow" aria-hidden="true">→</div>
-        <div class="arch-step reveal">
-          <span class="arch-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
-          </span>
-          <h3>Edge-хаб LinkEdge</h3>
-          <p>Фильтрует и хранит телеметрию локально, работает автономно при слабом или отсутствующем интернете.</p>
-        </div>
-        <div class="arch-arrow" aria-hidden="true">→</div>
-        <div class="arch-step reveal">
-          <span class="arch-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M6 18a4 4 0 0 1-1.967-.516"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
-          </span>
-          <h3>AI-агроном в облаке</h3>
-          <p>Предиктивные модели, откалиброванные под региональные типы почв и климат, формируют рекомендации.</p>
-        </div>
-        <div class="arch-arrow" aria-hidden="true">→</div>
-        <div class="arch-step reveal">
-          <span class="arch-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
-          </span>
-          <h3>Приложение фермера</h3>
-          <p>Готовый план полевых работ на сегодня — что, где и сколько — прямо в смартфоне.</p>
-        </div>
+        <ol class="arch-steps">
+          <li class="arch-step">
+            <span class="arch-node" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.247 7.761a6 6 0 0 1 0 8.478"/><path d="M19.075 4.933a10 10 0 0 1 0 14.134"/><path d="M4.925 19.067a10 10 0 0 1 0-14.134"/><path d="M7.753 16.239a6 6 0 0 1 0-8.478"/><circle cx="12" cy="12" r="2"/></svg>
+            </span>
+            <div class="arch-copy">
+              <h3>IoT-датчики</h3>
+              <p>Погружаются в корневую зону, снимают pH, влажность, температуру и состав газов каждые несколько минут.</p>
+            </div>
+          </li>
+          <li class="arch-step">
+            <span class="arch-node" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+            </span>
+            <div class="arch-copy">
+              <h3>Edge-хаб LinkEdge</h3>
+              <p>Фильтрует и хранит телеметрию локально, работает автономно при слабом или отсутствующем интернете.</p>
+            </div>
+          </li>
+          <li class="arch-step">
+            <span class="arch-node" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M6 18a4 4 0 0 1-1.967-.516"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+            </span>
+            <div class="arch-copy">
+              <h3>AI-агроном в облаке</h3>
+              <p>Предиктивные модели, откалиброванные под региональные типы почв и климат, формируют рекомендации.</p>
+            </div>
+          </li>
+          <li class="arch-step">
+            <span class="arch-node" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+            </span>
+            <div class="arch-copy">
+              <h3>Приложение фермера</h3>
+              <p>Готовый план полевых работ на сегодня — что, где и сколько — прямо в смартфоне.</p>
+            </div>
+          </li>
+        </ol>
       </div>
     </div>
   </section>
@@ -305,11 +311,10 @@
   <!-- COMPARISON -->
   <section id="compare" class="section">
     <div class="container">
-      <p class="eyebrow">Сравнение</p>
-      <h2 class="reveal">Сравнение с альтернативами</h2>
-      <p class="section-sub reveal">Как SoiLink соотносится с лабораторными анализами и существующими системами мониторинга.</p>
+      <h2 data-reveal-lines>Сравнение с альтернативами</h2>
+      <p class="section-sub" data-reveal>Как SoiLink соотносится с лабораторными анализами и существующими системами мониторинга.</p>
 
-      <div class="table-wrap reveal">
+      <div class="table-wrap">
         <table class="compare-table">
           <thead>
             <tr>
@@ -364,25 +369,27 @@
 
   <!-- INVEST + CONTACT -->
   <section id="invest" class="section invest-section">
+    <!-- Vanta NET mounts here: the sensor network over the night-blue section -->
+    <div class="invest-bg" id="investBg" aria-hidden="true"></div>
+
     <div class="container invest-grid">
-      <div class="invest-copy reveal">
-        <p class="eyebrow eyebrow-light">Инвесторам</p>
-        <h2>Создаём цифровую основу для сельского хозяйства региона.</h2>
-        <p class="invest-text">В Казахстане 90 млн га почв подвержены деградации, а отрасль теряет до $2,4 млрд ежегодно из-за неоптимального управления ресурсами. Мы открываем pre-seed раунд для завершения аппаратной части и проведения первых полевых испытаний.</p>
+      <div class="invest-copy">
+        <h2 data-reveal-lines>Создаём цифровую основу для сельского хозяйства региона.</h2>
+        <p class="invest-text" data-reveal>В Казахстане 90 млн га почв подвержены деградации, а отрасль теряет до $2,4 млрд ежегодно из-за неоптимального управления ресурсами. Мы открываем pre-seed раунд для завершения аппаратной части и проведения первых полевых испытаний.</p>
 
         <ul class="invest-list">
-          <li>
+          <li data-reveal>
             <span class="invest-tag">Инвесторам</span>
             конвертируемый займ (SAFE) с дисконтом к следующему раунду.
           </li>
-          <li>
+          <li data-reveal>
             <span class="invest-tag">Агрохолдингам</span>
             бронь первой серии хабов и датчиков по себестоимости + статус эксклюзивного пилотного партнёра.
           </li>
         </ul>
       </div>
 
-      <div class="invest-form-wrap reveal" id="contact">
+      <div class="invest-form-wrap" id="contact" data-reveal>
         <form class="invest-form" id="pitchForm" action="https://formspree.io/f/moeqlpwo" method="POST" novalidate>
           <h3>Получить Pitch Deck и финансовую модель</h3>
 
@@ -425,6 +432,12 @@
   </div>
 </footer>
 
-<script src="js/script.js"></script>
+<!-- Motion stack: Lenis (smooth scroll) + GSAP (ScrollTrigger, SplitText).
+     three.js + Vanta are lazy-loaded from script.js after the intro starts. -->
+<script defer src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js"></script>
+<script defer src="js/script.js"></script>
 </body>
 </html>
