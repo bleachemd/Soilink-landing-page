@@ -1163,6 +1163,8 @@ tbody tr:hover td.col-highlight { background: #d6e8ff; }
 .invest-form h3 {
   color: var(--ink);
   font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
   margin-bottom: 22px;
 }
 .field {
