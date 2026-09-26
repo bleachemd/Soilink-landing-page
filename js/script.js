@@ -128,6 +128,26 @@ if (canHover) {
   });
 }
 
+// Partner marquee — with only a few logos one list can be narrower than the
+// screen, which would leave a gap in the loop. Repeat the logos (hidden from
+// screen readers) until each list is at least a viewport wide.
+const fillMarquee = () => {
+  document.querySelectorAll('.marquee-list').forEach((list) => {
+    const originals = Array.from(list.children).filter((li) => !li.dataset.clone);
+    if (!originals.length || !list.offsetWidth) return;
+    for (let i = 0; i < 10 && list.offsetWidth < window.innerWidth; i++) {
+      originals.forEach((li) => {
+        const copy = li.cloneNode(true);
+        copy.dataset.clone = '1';
+        copy.setAttribute('aria-hidden', 'true');
+        list.appendChild(copy);
+      });
+    }
+  });
+};
+fillMarquee();
+window.addEventListener('resize', fillMarquee);
+
 // Screenshot placeholders — until the real product screens are dropped into
 // assets/, show a labelled placeholder instead of a broken-image icon.
 document.querySelectorAll('.shot-frame img').forEach((img) => {
