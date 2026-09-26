@@ -2,9 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [{ "type": "host", "value": "www.soilink.land" }],
-      "destination": "https://soilink.land/:path*",
+      "destination": "https://soilink.land/$1",
       "permanent": true
     }
   ],
