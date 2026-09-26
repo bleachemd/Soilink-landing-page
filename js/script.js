@@ -258,10 +258,27 @@ function initMotion() {
 
   // ---------- Lenis smooth scroll, driven by GSAP's ticker ----------
   if (!reduceMotion && typeof window.Lenis !== 'undefined') {
-    const lenis = new Lenis({ lerp: 0.1, anchors: { offset: -80 } });
+    const lenis = new Lenis({ lerp: 0.1 });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add((time) => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
+
+    // Anchor links glide with Lenis. Positions are measured here rather than
+    // by Lenis so the pinned architecture section lands at its pin start.
+    const anchorY = (el) => {
+      if (el.id === 'top') return 0;
+      const pinned = ScrollTrigger.getAll().find((t) => t.pin === el);
+      if (pinned) return pinned.start;
+      return el.getBoundingClientRect().top + window.scrollY - header.offsetHeight;
+    };
+    document.addEventListener('click', (event) => {
+      const link = event.target.closest('a[href^="#"]');
+      const target = link && link.hash.length > 1 && document.querySelector(link.hash);
+      if (!target) return;
+      event.preventDefault();
+      lenis.scrollTo(anchorY(target));
+      history.replaceState(null, '', link.hash);
+    });
   }
 
   // Layout shifts once web fonts land — re-measure every trigger.
