@@ -304,7 +304,6 @@ function initMotion() {
   initCountUp();
   initShowcase(mm);
   initVelocityMarquee();
-  initCompareRows();
   ScrollTrigger.sort();
 
   if (document.readyState === 'complete') initVanta();
@@ -619,18 +618,6 @@ function initVelocityMarquee() {
     const boost = Math.min(8, Math.abs(velocity) / 3);
     x = gsap.utils.wrap(-width, 0, x + direction * baseSpeed * (deltaMs / 1000) * (1 + boost));
     setX(x);
-  });
-}
-
-// ---------- Comparison table rows stream in ----------
-function initCompareRows() {
-  gsap.from('.compare-table tbody tr', {
-    y: 22,
-    opacity: 0,
-    duration: 0.7,
-    stagger: 0.07,
-    ease: 'power3.out',
-    scrollTrigger: { trigger: '.table-wrap', start: 'top 85%', once: true },
   });
 }
 
